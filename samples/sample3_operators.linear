@@ -1,0 +1,121 @@
+// Linear Language Sample Program 3
+// Author: Khadimul Islam Mahi (2107076)
+// Description: All operators and control structures
+
+// Arithmetic operators test
+int a = 100;
+int b = 30;
+
+int add_result = a + b;      // Addition
+int sub_result = a - b;      // Subtraction
+int mul_result = a * b;      // Multiplication
+int div_result = a / b;      // Division
+int mod_result = a % b;      // Modulus
+
+print("Arithmetic Operations:");
+print(add_result);
+print(sub_result);
+print(mul_result);
+print(div_result);
+print(mod_result);
+
+// Assignment operators
+int c = 10;
+c += 5;   // c = 15
+c -= 3;   // c = 12
+c *= 2;   // c = 24
+c /= 4;   // c = 6
+c %= 4;   // c = 2
+
+print("After compound assignments:");
+print(c);
+
+// Increment and decrement
+int counter = 0;
+counter++;
+counter++;
+print("After increments:");
+print(counter);
+counter--;
+print("After decrement:");
+print(counter);
+
+// Relational operators
+bool eq = (a == b);     // false
+bool ne = (a != b);     // true
+bool lt = (a < b);      // false
+bool gt = (a > b);      // true
+bool le = (a <= b);     // false
+bool ge = (a >= b);     // true
+
+// Logical operators
+bool x = true;
+bool y = false;
+
+bool and_result = x && y;     // false
+bool or_result = x || y;      // true
+bool not_result = !x;         // false
+
+// Alternative logical operators
+bool and_alt = x and y;
+bool or_alt = x or y;
+bool not_alt = not x;
+
+// Nested conditionals
+int score = 85;
+if (score >= 90)
+begin
+    print("Grade: A");
+end
+else
+begin
+    if (score >= 80)
+    begin
+        print("Grade: B");
+    end
+    else
+    begin
+        if (score >= 70)
+        begin
+            print("Grade: C");
+        end
+        else
+        begin
+            print("Grade: F");
+        end
+    end
+end
+
+// Break and continue
+int i = 0;
+while (i < 10)
+begin
+    if (i == 5)
+    begin
+        break;
+    end
+    print(i);
+    i += 1;
+end
+
+// Const declaration
+const int MAX_VALUE = 100;
+const float PI = 3.14159;
+const string APP_NAME = "Linear Compiler";
+
+// Input from user
+int user_input;
+read(user_input);
+print("You entered:");
+print(user_input);
+
+// Custom functions demo
+int gcd_result = mahi_gcd(56, 98);
+print("GCD(56, 98) = ");
+print(gcd_result);
+
+bool prime_check = mahi_isprime(29);
+if (prime_check)
+begin
+    print("29 is a prime number");
+end

@@ -1,0 +1,62 @@
+// Linear Language Sample Program 1
+// Author: Khadimul Islam Mahi (2107076)
+// Description: Basic variable declarations and arithmetic
+
+// Variable declarations
+int x = 10;
+int y = 20;
+float pi = 3.14159;
+bool flag = true;
+char letter = 'A';
+string message = "Hello, Linear!";
+
+// Arithmetic operations
+int sum = x + y;
+int diff = y - x;
+int product = x * y;
+float quotient = y / x;
+int remainder = y % x;
+
+// Output
+print("Sum: ");
+print(sum);
+print("Difference: ");
+print(diff);
+
+// Conditional statement
+if (x < y)
+begin
+    print("x is less than y");
+end
+else
+begin
+    print("x is greater than or equal to y");
+end
+
+// Loop example
+int i = 0;
+while (i < 5)
+begin
+    print(i);
+    i += 1;
+end
+
+// For loop
+for (int j = 0; j < 3; j = j + 1)
+begin
+    print(j);
+end
+
+// Using custom function
+int result = mahi_gcd(48, 18);
+print("GCD of 48 and 18: ");
+print(result);
+
+// Check if prime
+bool isPrime = mahi_isprime(17);
+if (isPrime)
+begin
+    print("17 is prime");
+end
+
+// End of program

@@ -1,0 +1,167 @@
+// ============================================================
+// LINEAR LANGUAGE - EDGE CASE TEST FILE
+// Author: Khadimul Islam Mahi (2107076)
+// Purpose: Test edge cases and boundary conditions
+// ============================================================
+
+// ==================== CONSECUTIVE OPERATORS ====================
+int a = 5;
+a++;
+a--;
+int b = a + + 3;
+int c = a - - 3;
+int d = a * - 3;
+
+// ==================== OPERATOR PRECEDENCE TESTS ====================
+int expr1 = 5 + 3 * 2;
+int expr2 = (5 + 3) * 2;
+int expr3 = 10 / 2 + 3;
+int expr4 = 10 % 3 + 2;
+
+// ==================== CHAINED ASSIGNMENTS ====================
+int x = 10;
+x += 5;
+x -= 2;
+x *= 3;
+x /= 2;
+x %= 7;
+
+// ==================== RELATIONAL OPERATOR COMBINATIONS ====================
+bool test1 = (5 <= 5);
+bool test2 = (5 >= 5);
+bool test3 = (5 == 5);
+bool test4 = (5 != 6);
+bool test5 = (4 < 5);
+bool test6 = (6 > 5);
+
+// ==================== LOGICAL OPERATOR COMBINATIONS ====================
+bool l1 = true && true;
+bool l2 = true && false;
+bool l3 = false || true;
+bool l4 = false || false;
+bool l5 = !true;
+bool l6 = !false;
+bool l7 = true and true;
+bool l8 = true or false;
+bool l9 = not false;
+
+// ==================== NESTED FUNCTION CALLS ====================
+int nested1 = mahi_gcd(mahi_gcd(100, 50), 25);
+bool nested2 = mahi_isprime(mahi_gcd(14, 7));
+int nested3 = mahi_gcd(48, mahi_gcd(36, 24));
+
+// ==================== ALL CUSTOM FUNCTIONS ====================
+// mahi_sum
+int arr[5];
+int sum_result = mahi_sum(arr, 5);
+
+// mahi_reverse
+string str1 = "hello";
+string rev1 = mahi_reverse(str1);
+string rev2 = mahi_reverse("world");
+
+// mahi_gcd - various test cases
+int gcd1 = mahi_gcd(0, 5);
+int gcd2 = mahi_gcd(5, 0);
+int gcd3 = mahi_gcd(1, 1);
+int gcd4 = mahi_gcd(100, 100);
+int gcd5 = mahi_gcd(17, 13);
+int gcd6 = mahi_gcd(48, 18);
+int gcd7 = mahi_gcd(1071, 462);
+
+// mahi_isprime - various test cases
+bool p1 = mahi_isprime(0);
+bool p2 = mahi_isprime(1);
+bool p3 = mahi_isprime(2);
+bool p4 = mahi_isprime(3);
+bool p5 = mahi_isprime(4);
+bool p6 = mahi_isprime(17);
+bool p7 = mahi_isprime(97);
+bool p8 = mahi_isprime(100);
+
+// ==================== MIXED DATA TYPE DECLARATIONS ====================
+int int_var = 42;
+float float_var = 3.14;
+bool bool_var = true;
+char char_var = 'X';
+string string_var = "test";
+
+// ==================== CUSTOM DATA STRUCTURES ====================
+graph my_graph;
+tree my_tree;
+range_tree my_range_tree;
+dsu my_dsu;
+matrix my_matrix;
+ordered_set my_ordered_set;
+
+// ==================== KEYWORD COMBINATIONS ====================
+func void test_func()
+begin
+    const int LOCAL_CONST = 50;
+    
+    if (true)
+    begin
+        while (false)
+        begin
+            break;
+        end
+        continue;
+    end
+    else
+    begin
+        return;
+    end
+end
+
+// ==================== IDENTIFIER EDGE CASES ====================
+int _;
+int _a;
+int a_;
+int _a_b_c_;
+int a1b2c3;
+int INT;
+int Float;
+int BOOL;
+int String;
+
+// ==================== DELIMITER TESTS ====================
+int array[10];
+int matrix_test[5][5];
+func_call(a, b, c);
+obj.member.submember;
+
+// ==================== STRING EDGE CASES ====================
+string empty = "";
+string spaces = "   ";
+string special = "Hello\nWorld\t!";
+string quotes = "Say \"Hello\"";
+
+// ==================== COMMENT TESTS ====================
+// This is a comment
+int after_comment = 10; // inline comment
+// // nested comment style
+
+// ==================== COMPLEX EXPRESSIONS ====================
+int complex1 = ((5 + 3) * 2 - 10) / 5 % 3;
+bool complex2 = (5 > 3 && 10 <= 20) || !(5 == 5);
+int complex3 = mahi_gcd(mahi_gcd(mahi_gcd(100, 50), 25), 5);
+
+// ==================== CONTROL FLOW EDGE CASES ====================
+if (mahi_isprime(2))
+begin
+end
+
+while (false)
+begin
+end
+
+for (int i = 0; i < 0; i++)
+begin
+end
+
+// ==================== MAIN FUNCTION ====================
+func int main()
+begin
+    print("All edge case tests passed!");
+    return 0;
+end

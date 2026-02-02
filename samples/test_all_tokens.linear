@@ -1,0 +1,186 @@
+// ============================================================
+// LINEAR LANGUAGE - COMPREHENSIVE TOKEN TEST FILE
+// Author: Khadimul Islam Mahi (2107076)
+// Purpose: Test ALL keywords, operators, types, and functions
+// ============================================================
+
+// ==================== PRIMITIVE DATA TYPES ====================
+int integer_var;
+float float_var;
+bool boolean_var;
+char character_var;
+string string_var;
+void void_type;
+
+// ==================== CUSTOM DATA TYPES ====================
+graph graph_structure;
+tree tree_structure;
+range_tree range_tree_structure;
+dsu disjoint_set_union;
+matrix matrix_structure;
+ordered_set ordered_set_structure;
+
+// ==================== BLOCK KEYWORDS ====================
+begin
+end
+
+// ==================== CONTROL FLOW KEYWORDS ====================
+if (true)
+begin
+end
+
+else
+begin
+end
+
+while (true)
+begin
+    break;
+    continue;
+end
+
+for (int i = 0; i < 10; i = i + 1)
+begin
+end
+
+return 0;
+
+// ==================== FUNCTION KEYWORD ====================
+func int testFunction(int param)
+begin
+    return param;
+end
+
+// ==================== I/O KEYWORDS ====================
+read(integer_var);
+print(integer_var);
+print("Hello World");
+
+// ==================== OTHER KEYWORDS ====================
+const int CONSTANT = 100;
+main;
+null;
+
+// ==================== BOOLEAN LITERALS ====================
+bool t = true;
+bool f = false;
+
+// ==================== LOGICAL OPERATORS (WORD FORM) ====================
+bool and_result = true and false;
+bool or_result = true or false;
+bool not_result = not true;
+
+// ==================== ARITHMETIC OPERATORS ====================
+int add = 5 + 3;
+int sub = 5 - 3;
+int mul = 5 * 3;
+int div = 5 / 3;
+int mod = 5 % 3;
+
+// ==================== INCREMENT/DECREMENT ====================
+int counter = 0;
+counter++;
+counter--;
+
+// ==================== ASSIGNMENT OPERATORS ====================
+int x = 10;
+x += 5;
+x -= 3;
+x *= 2;
+x /= 4;
+x %= 3;
+
+// ==================== RELATIONAL OPERATORS ====================
+bool eq = (5 == 5);
+bool ne = (5 != 3);
+bool lt = (3 < 5);
+bool gt = (5 > 3);
+bool le = (3 <= 5);
+bool ge = (5 >= 3);
+
+// ==================== LOGICAL OPERATORS (SYMBOL FORM) ====================
+bool logical_and = true && false;
+bool logical_or = true || false;
+bool logical_not = !true;
+
+// ==================== DELIMITERS ====================
+int arr[10];
+func_call(arg1, arg2);
+obj.member;
+
+// ==================== LITERALS ====================
+int int_literal = 12345;
+int negative = -999;
+float float_literal = 3.14159;
+float scientific = 123.456;
+string str_literal = "This is a string with spaces";
+string escaped = "String with \"quotes\" inside";
+char char_literal = 'A';
+char special_char = '\n';
+
+// ==================== CUSTOM FUNCTIONS (MAHI - 2107076) ====================
+// Test mahi_sum
+int total = mahi_sum(arr, 10);
+
+// Test mahi_reverse
+string reversed = mahi_reverse("hello");
+
+// Test mahi_gcd
+int gcd_result = mahi_gcd(48, 18);
+int gcd_test2 = mahi_gcd(100, 25);
+int gcd_test3 = mahi_gcd(7, 13);
+
+// Test mahi_isprime
+bool prime1 = mahi_isprime(2);
+bool prime2 = mahi_isprime(17);
+bool prime3 = mahi_isprime(100);
+bool prime4 = mahi_isprime(1);
+
+// ==================== COMBINED EXPRESSIONS ====================
+int complex_expr = (5 + 3) * 2 - 10 / 5 % 3;
+bool complex_bool = (5 > 3) && (10 <= 20) || !(5 == 5);
+int chained = mahi_gcd(mahi_gcd(100, 50), 25);
+
+// ==================== IDENTIFIERS ====================
+int simple;
+int camelCase;
+int snake_case;
+int _underscore_start;
+int mixed_123_case;
+int UPPERCASE;
+
+// ==================== NESTED STRUCTURES ====================
+if (mahi_isprime(17))
+begin
+    if (mahi_gcd(10, 5) == 5)
+    begin
+        print("Nested condition passed");
+    end
+end
+
+// ==================== COMPLETE FUNCTION EXAMPLE ====================
+func int calculate(int a, int b)
+begin
+    int sum = a + b;
+    int product = a * b;
+    int gcd = mahi_gcd(a, b);
+    
+    if (mahi_isprime(sum))
+    begin
+        return sum;
+    end
+    else
+    begin
+        return product;
+    end
+end
+
+// ==================== DATA STRUCTURE USAGE ====================
+graph g;
+tree t;
+range_tree rt;
+dsu uf;
+matrix m;
+ordered_set os;
+
+// ==================== END OF TEST FILE ====================
