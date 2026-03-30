@@ -24,6 +24,9 @@ extern int yylineno;
 extern char* yytext;
 void yyerror(const char *s);
 static void insert_param_symbols(ASTNode *params);
+static int generate_token_file(const char *source_path, char *out_path, size_t out_path_size);
+static const char *token_name(int tok);
+static void free_token_payload_if_needed(int tok);
 
 ASTNode* root = NULL; // The root of the abstract syntax tree
 %}
@@ -454,6 +457,14 @@ int main(int argc, char **argv) {
             fprintf(stderr, "Warning: failed to generate C code (code=%d).\n", c_ok);
         }
 
+        char tok_path[1024];
+        int tok_ok = generate_token_file(path, tok_path, sizeof(tok_path));
+        if (tok_ok == 0) {
+            printf("Tokens generated: %s\n", tok_path);
+        } else {
+            fprintf(stderr, "Warning: failed to generate token file (code=%d).\n", tok_ok);
+        }
+
         interpret(root);
         free_ast(root);
         root = NULL;
@@ -478,4 +489,134 @@ static void insert_param_symbols(ASTNode *params) {
         if (p->name)
             insert_symbol(p->name, (DataType)p->int_val, yylineno);
     }
+}
+
+static const char *token_name(int tok) {
+    switch (tok) {
+        case T_INT: return "T_INT";
+        case T_FLOAT: return "T_FLOAT";
+        case T_BOOL: return "T_BOOL";
+        case T_CHAR: return "T_CHAR";
+        case T_STRING: return "T_STRING";
+        case T_VOID: return "T_VOID";
+        case T_GRAPH: return "T_GRAPH";
+        case T_TREE: return "T_TREE";
+        case T_RANGE_TREE: return "T_RANGE_TREE";
+        case T_DSU: return "T_DSU";
+        case T_MATRIX: return "T_MATRIX";
+        case T_ORDERED_SET: return "T_ORDERED_SET";
+        case T_STACK: return "T_STACK";
+        case T_QUEUE: return "T_QUEUE";
+        case T_IF: return "T_IF";
+        case T_ELSE: return "T_ELSE";
+        case T_FOR: return "T_FOR";
+        case T_WHILE: return "T_WHILE";
+        case T_RETURN: return "T_RETURN";
+        case T_BREAK: return "T_BREAK";
+        case T_CONTINUE: return "T_CONTINUE";
+        case T_FUNCTION: return "T_FUNCTION";
+        case T_MAIN: return "T_MAIN";
+        case T_START: return "T_START";
+        case T_END: return "T_END";
+        case T_IDENTIFIER: return "T_IDENTIFIER";
+        case T_INT_LITERAL: return "T_INT_LITERAL";
+        case T_FLOAT_LITERAL: return "T_FLOAT_LITERAL";
+        case T_STRING_LITERAL: return "T_STRING_LITERAL";
+        case T_BOOL_LITERAL: return "T_BOOL_LITERAL";
+        case T_CHAR_LITERAL: return "T_CHAR_LITERAL";
+        case T_ASSIGN: return "T_ASSIGN";
+        case T_PLUS: return "T_PLUS";
+        case T_MINUS: return "T_MINUS";
+        case T_MULTIPLY: return "T_MULTIPLY";
+        case T_DIVIDE: return "T_DIVIDE";
+        case T_MODULO: return "T_MODULO";
+        case T_PLUS_ASSIGN: return "T_PLUS_ASSIGN";
+        case T_MINUS_ASSIGN: return "T_MINUS_ASSIGN";
+        case T_STAR_ASSIGN: return "T_STAR_ASSIGN";
+        case T_SLASH_ASSIGN: return "T_SLASH_ASSIGN";
+        case T_PERCENT_ASSIGN: return "T_PERCENT_ASSIGN";
+        case T_EQ: return "T_EQ";
+        case T_NEQ: return "T_NEQ";
+        case T_LT: return "T_LT";
+        case T_GT: return "T_GT";
+        case T_LTE: return "T_LTE";
+        case T_GTE: return "T_GTE";
+        case T_AND: return "T_AND";
+        case T_OR: return "T_OR";
+        case T_NOT: return "T_NOT";
+        case T_LPAREN: return "T_LPAREN";
+        case T_RPAREN: return "T_RPAREN";
+        case T_LBRACE: return "T_LBRACE";
+        case T_RBRACE: return "T_RBRACE";
+        case T_LBRACKET: return "T_LBRACKET";
+        case T_RBRACKET: return "T_RBRACKET";
+        case T_COMMA: return "T_COMMA";
+        case T_SEMICOLON: return "T_SEMICOLON";
+        case T_MAHI_READ: return "T_MAHI_READ";
+        case T_MAHI_WRITE: return "T_MAHI_WRITE";
+        case T_MAHI_SORT: return "T_MAHI_SORT";
+        case T_MAHI_PUSH: return "T_MAHI_PUSH";
+        default: return "UNKNOWN_TOKEN";
+    }
+}
+
+static void free_token_payload_if_needed(int tok) {
+    if (tok == T_IDENTIFIER || tok == T_STRING_LITERAL || tok == T_CHAR_LITERAL) {
+        if (yylval.str_val) {
+            free(yylval.str_val);
+            yylval.str_val = NULL;
+        }
+    }
+}
+
+static int generate_token_file(const char *source_path, char *out_path, size_t out_path_size) {
+    if (!source_path || !*source_path) return -1;
+
+    char path_buf[1024];
+    snprintf(path_buf, sizeof(path_buf), "%s", source_path);
+    char *slash1 = strrchr(path_buf, '/');
+    char *slash2 = strrchr(path_buf, '\\');
+    char *slash = slash1 > slash2 ? slash1 : slash2;
+    char *dot = strrchr(path_buf, '.');
+    if (dot && (!slash || dot > slash)) {
+        *dot = '\0';
+    }
+
+    if (strlen(path_buf) + strlen(".tokens.txt") + 1 > sizeof(path_buf)) return -2;
+    strcat(path_buf, ".tokens.txt");
+
+    FILE *in = fopen(source_path, "r");
+    if (!in) return -3;
+    FILE *out = fopen(path_buf, "w");
+    if (!out) {
+        fclose(in);
+        return -4;
+    }
+
+    FILE *old_yyin = yyin;
+    int old_lineno = yylineno;
+
+    yyin = in;
+    yylineno = 1;
+
+    fprintf(out, "# Tokens for %s\n", source_path);
+    fprintf(out, "# Format: line\tTOKEN\tLEXEME\n\n");
+
+    int tok;
+    while ((tok = yylex()) != 0) {
+        fprintf(out, "%d\t%s\t%s\n", yylineno, token_name(tok), yytext ? yytext : "");
+        free_token_payload_if_needed(tok);
+    }
+
+    yyin = old_yyin;
+    yylineno = old_lineno;
+
+    fclose(out);
+    fclose(in);
+
+    if (out_path && out_path_size > 0) {
+        snprintf(out_path, out_path_size, "%s", path_buf);
+    }
+
+    return 0;
 }
