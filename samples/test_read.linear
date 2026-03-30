@@ -1,0 +1,5 @@
+START main {
+    int x;
+    MAHI_read(x);
+    MAHI_write(x);
+} END

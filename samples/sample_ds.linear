@@ -1,0 +1,38 @@
+START main {
+    Graph g;
+    g = graph_new(5);
+    graph_add_edge(g, 0, 1);
+    graph_add_edge(g, 1, 2);
+    MAHI_write(graph_shortest_path(g, 0, 2));
+    MAHI_write(graph_connected(g, 0, 4));
+
+    DSU d;
+    d = dsu_new(5);
+    dsu_union(d, 0, 1);
+    MAHI_write(dsu_same(d, 0, 1));
+
+    Matrix m;
+    m = matrix_new(2, 2);
+    matrix_set(m, 0, 0, 1);
+    matrix_set(m, 1, 1, 1);
+    MAHI_write(matrix_get(m, 0, 0));
+
+    OrderedSet s;
+    s = oset_new();
+    oset_insert(s, 10);
+    oset_insert(s, 5);
+    MAHI_write(oset_nth(s, 0));
+
+    RangeTree rt;
+    rt = segtree_new(4);
+    segtree_set(rt, 0, 2);
+    segtree_set(rt, 1, 5);
+    MAHI_write(segtree_sum(rt, 0, 1));
+
+    Tree tr;
+    tr = tree_new(4);
+    tree_set_parent(tr, 1, 0);
+    tree_set_parent(tr, 2, 0);
+    tree_set_parent(tr, 3, 1);
+    MAHI_write(tree_lca(tr, 2, 3));
+} END

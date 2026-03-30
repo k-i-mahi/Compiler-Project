@@ -1,0 +1,18 @@
+START main {
+    // Declarations
+    int x = 10;
+    float y = 3.14;
+    string msg = "Hello from Linear!";
+
+    // Arithmetic and Control Flow
+    x = x + 5 * 2;
+
+    if (x > 15) {
+        MAHI_write(msg);
+    } else {
+        int z = 0;
+        while (z < 5) {
+            z = z + 1;
+        }
+    }
+} END
