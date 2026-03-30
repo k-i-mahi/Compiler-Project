@@ -1,0 +1,26 @@
+# Auto-generated Three Address Code
+# Source: .\samples\sample_ast.linear
+
+main:
+    x = 10
+    y = 3.14
+    msg = "Hello from Linear!"
+    t1 = 5 * 2
+    t2 = x + t1
+    x = t2
+    t3 = x > 15
+    ifFalse t3 goto L_else_1
+    param msg
+    call MAHI_write, 1
+    goto L_if_end_2
+L_else_1:
+    z = 0
+L_while_cond_3:
+    t4 = z < 5
+    ifFalse t4 goto L_while_end_4
+    t5 = z + 1
+    z = t5
+    goto L_while_cond_3
+L_while_end_4:
+L_if_end_2:
+    halt

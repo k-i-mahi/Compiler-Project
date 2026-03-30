@@ -107,6 +107,7 @@ void print_ast(ASTNode* node, int level) {
 
     switch (node->type) {
         case NODE_PROGRAM: printf("Program\n"); break;
+        case NODE_FUNC_DECL: printf("FuncDecl: %s\n", node->name ? node->name : ""); break;
         case NODE_BLOCK: printf("Block\n"); break;
         case NODE_VAR_DECL: printf("VarDecl: %s\n", node->name ? node->name : ""); break;
         case NODE_ASSIGN: printf("Assign\n"); break;

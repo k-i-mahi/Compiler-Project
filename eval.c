@@ -46,12 +46,17 @@ typedef struct Env {
 } Env;
 
 static Env *env_current = NULL;
+static ASTNode *g_function_decls = NULL;
 
 typedef enum {
     EV_OK,
     EV_BREAK,
-    EV_CONTINUE
+    EV_CONTINUE,
+    EV_RETURN
 } EvalResult;
+
+static int g_has_return = 0;
+static Value g_return_value;
 
 static void value_clear(Value *v) {
     switch (v->kind) {
@@ -354,6 +359,14 @@ static double val_as_double(Value v) {
 static Value eval_expr(ASTNode *n);
 static Value eval_func_call(ASTNode *n); /* defined after eval_expr */
 
+static ASTNode *find_function_decl(const char *name) {
+    for (ASTNode *f = g_function_decls; f; f = f->next) {
+        if (f->type == NODE_FUNC_DECL && f->name && strcmp(f->name, name) == 0)
+            return f;
+    }
+    return NULL;
+}
+
 static char *strip_string_quotes(const char *raw) {
     size_t len = strlen(raw);
     if (len >= 2 && raw[0] == '"' && raw[len - 1] == '"') {
@@ -560,6 +573,7 @@ static EvalResult eval_stmt(ASTNode *n) {
                 EvalResult r = eval_stmt_or_block(n->right);
                 if (r == EV_BREAK) break;
                 if (r == EV_CONTINUE) continue;
+                if (r == EV_RETURN) return EV_RETURN;
             }
             return EV_OK;
         }
@@ -575,6 +589,7 @@ static EvalResult eval_stmt(ASTNode *n) {
                 value_clear(&c);
                 EvalResult r = eval_stmt_or_block(n->body);
                 if (r == EV_BREAK) break;
+                if (r == EV_RETURN) return EV_RETURN;
                 if (r == EV_CONTINUE) {
                     eval_expr(n->right);
                     continue;
@@ -591,9 +606,14 @@ static EvalResult eval_stmt(ASTNode *n) {
         case NODE_CONTINUE:
             return EV_CONTINUE;
         case NODE_RETURN:
+            if (g_has_return)
+                value_clear(&g_return_value);
             if (n->left)
-                eval_expr(n->left);
-            return EV_OK;
+                g_return_value = eval_expr(n->left);
+            else
+                g_return_value = make_int(0);
+            g_has_return = 1;
+            return EV_RETURN;
         case NODE_BLOCK:
             return eval_stmt_or_block(n);
         default:
@@ -1013,6 +1033,49 @@ static Value eval_func_call(ASTNode *n) {
         return make_int(r);
     }
 
+    {
+        ASTNode *decl = find_function_decl(fn);
+        if (decl) {
+            env_push();
+
+            ASTNode *p = decl->left;
+            ASTNode *a = args;
+            while (p) {
+                Value av = a ? eval_expr(a) : make_int(0);
+                env_declare(p->name ? p->name : "", av);
+                p = p->next;
+                if (a) a = a->next;
+            }
+
+            int prev_has = g_has_return;
+            Value prev_ret;
+            memset(&prev_ret, 0, sizeof(prev_ret));
+            if (prev_has)
+                prev_ret = value_dup(&g_return_value);
+
+            g_has_return = 0;
+            EvalResult r = eval_stmt_or_block(decl->right);
+
+            Value out = make_int(0);
+            if (r == EV_RETURN && g_has_return)
+                out = value_dup(&g_return_value);
+
+            if (g_has_return)
+                value_clear(&g_return_value);
+
+            if (prev_has) {
+                g_return_value = prev_ret;
+                g_has_return = 1;
+            } else {
+                memset(&g_return_value, 0, sizeof(g_return_value));
+                g_has_return = 0;
+            }
+
+            env_pop();
+            return out;
+        }
+    }
+
     fprintf(stderr, "Runtime: unknown call '%s'\n", fn);
     return make_int(0);
 }
@@ -1022,5 +1085,10 @@ void interpret(ASTNode *root) {
         fprintf(stderr, "Nothing to run.\n");
         return;
     }
+
+    g_function_decls = root->middle;
+    g_has_return = 0;
+    memset(&g_return_value, 0, sizeof(g_return_value));
+
     eval_stmt_or_block(root->left);
 }

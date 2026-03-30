@@ -1,59 +1,25 @@
-// Linear Language Sample Program 2
-// Author: Khadimul Islam Mahi (2107076)
-// Description: Functions and advanced data structures
-
-// Function definition
-func int add(int a, int b)
-begin
+function int add(int a, int b) {
     return a + b;
-end
+}
 
-func float multiply(float x, float y)
-begin
+function float multiply(float x, float y) {
     return x * y;
-end
+}
 
-func void greet(string name)
-begin
-    print("Hello, ");
-    print(name);
-end
-
-// Main program
-int main()
-begin
-    // Using functions
-    int sum = add(5, 10);
-    print(sum);
-    
-    float product = multiply(3.5, 2.0);
-    print(product);
-    
-    greet("Mahi");
-    
-    // Graph declaration
-    graph g;
-    
-    // Tree declaration
-    tree t;
-    
-    // DSU for union-find
-    dsu uf;
-    
-    // Matrix operations
-    matrix m;
-    
-    // Ordered set
-    ordered_set os;
-    
-    // Range tree for queries
-    range_tree rt;
-    
-    // Using custom Mahi functions
-    string text = "Linear";
-    string reversed = mahi_reverse(text);
-    print("Reversed: ");
-    print(reversed);
-    
+function void greet(string name) {
+    MAHI_write("Hello");
+    MAHI_write(name);
     return 0;
-end
+}
+
+START main {
+    int sum = add(5, 10);
+    MAHI_write("sum:");
+    MAHI_write(sum);
+
+    float product = multiply(3.5, 2.0);
+    MAHI_write("product:");
+    MAHI_write(product);
+
+    greet("Mahi");
+} END

@@ -1,0 +1,298 @@
+# Auto-generated Three Address Code
+# Source: .\samples\test.linear
+
+main:
+    param "=== Linear Pipeline Demo Start ==="
+    call MAHI_write, 1
+    a = 6
+    b = 4
+    t1 = a * b
+    t2 = t1 + 2
+    c = t2
+    pi = 3.14
+    ok = true
+    title = "All-features demo"
+    param title
+    call MAHI_write, 1
+    param "Value of c:"
+    call MAHI_write, 1
+    param c
+    call MAHI_write, 1
+    param "Float pi:"
+    call MAHI_write, 1
+    param pi
+    call MAHI_write, 1
+    param "Bool ok:"
+    call MAHI_write, 1
+    param ok
+    call MAHI_write, 1
+    t3 = c > 20
+    ifFalse t3 goto L_else_1
+    param "c is greater than 20"
+    call MAHI_write, 1
+    goto L_if_end_2
+L_else_1:
+    param "c is not greater than 20"
+    call MAHI_write, 1
+L_if_end_2:
+    sum = 0
+    i = 1
+L_for_cond_3:
+    t4 = i <= 5
+    ifFalse t4 goto L_for_end_5
+    t5 = sum + i
+    sum = t5
+L_for_inc_4:
+    t6 = i + 1
+    i = t6
+    goto L_for_cond_3
+L_for_end_5:
+    param "Sum 1..5:"
+    call MAHI_write, 1
+    param sum
+    call MAHI_write, 1
+    w = 0
+    wsum = 0
+L_while_cond_6:
+    t7 = w < 6
+    ifFalse t7 goto L_while_end_7
+    t8 = w + 1
+    w = t8
+    t9 = w == 2
+    ifFalse t9 goto L_else_8
+    goto L_while_cond_6
+    goto L_if_end_9
+L_else_8:
+L_if_end_9:
+    t10 = w == 6
+    ifFalse t10 goto L_else_10
+    goto L_while_end_7
+    goto L_if_end_11
+L_else_10:
+L_if_end_11:
+    t11 = wsum + w
+    wsum = t11
+    goto L_while_cond_6
+L_while_end_7:
+    param "While sum with continue/break:"
+    call MAHI_write, 1
+    param wsum
+    call MAHI_write, 1
+    param 6
+    t12 = call dsu_new, 1
+    d = t12
+    param d
+    param 1
+    param 2
+    call dsu_union, 3
+    param d
+    param 2
+    param 3
+    call dsu_union, 3
+    param "DSU same(1,3):"
+    call MAHI_write, 1
+    param d
+    param 1
+    param 3
+    t13 = call dsu_same, 3
+    param t13
+    call MAHI_write, 1
+    param 4
+    t14 = call graph_new, 1
+    g = t14
+    param g
+    param 0
+    param 1
+    call graph_add_edge, 3
+    param g
+    param 1
+    param 2
+    call graph_add_edge, 3
+    param "Graph shortest path 0->2:"
+    call MAHI_write, 1
+    param g
+    param 0
+    param 2
+    t15 = call graph_shortest_path, 3
+    param t15
+    call MAHI_write, 1
+    param 5
+    t16 = call tree_new, 1
+    t = t16
+    param t
+    param 1
+    param 0
+    call tree_set_parent, 3
+    param t
+    param 2
+    param 0
+    call tree_set_parent, 3
+    param t
+    param 3
+    param 1
+    call tree_set_parent, 3
+    param t
+    param 4
+    param 1
+    call tree_set_parent, 3
+    param "Tree LCA(3,4):"
+    call MAHI_write, 1
+    param t
+    param 3
+    param 4
+    t17 = call tree_lca, 3
+    param t17
+    call MAHI_write, 1
+    param "Tree depth(4):"
+    call MAHI_write, 1
+    param t
+    param 4
+    t18 = call tree_depth, 2
+    param t18
+    call MAHI_write, 1
+    param 8
+    t19 = call segtree_new, 1
+    rt = t19
+    param rt
+    param 0
+    param 5
+    call segtree_set, 3
+    param rt
+    param 1
+    param 10
+    call segtree_set, 3
+    param rt
+    param 2
+    param 15
+    call segtree_set, 3
+    param "RangeTree sum [0,2]:"
+    call MAHI_write, 1
+    param rt
+    param 0
+    param 2
+    t20 = call segtree_sum, 3
+    param t20
+    call MAHI_write, 1
+    param "RangeTree min [0,2]:"
+    call MAHI_write, 1
+    param rt
+    param 0
+    param 2
+    t21 = call segtree_min, 3
+    param t21
+    call MAHI_write, 1
+    param 2
+    param 2
+    t22 = call matrix_new, 2
+    m = t22
+    param m
+    param 0
+    param 0
+    param 1
+    call matrix_set, 4
+    param m
+    param 0
+    param 1
+    param 2
+    call matrix_set, 4
+    param m
+    param 1
+    param 0
+    param 3
+    call matrix_set, 4
+    param m
+    param 1
+    param 1
+    param 4
+    call matrix_set, 4
+    param "Matrix m[1][0]:"
+    call MAHI_write, 1
+    param m
+    param 1
+    param 0
+    t23 = call matrix_get, 3
+    param t23
+    call MAHI_write, 1
+    param 2
+    t24 = call matrix_identity, 1
+    id = t24
+    param m
+    param id
+    t25 = call matrix_mul, 2
+    mm = t25
+    param "Matrix mul by identity, mm[0][1]:"
+    call MAHI_write, 1
+    param mm
+    param 0
+    param 1
+    t26 = call matrix_get, 3
+    param t26
+    call MAHI_write, 1
+    t27 = call oset_new, 0
+    os = t27
+    param os
+    param 30
+    call oset_insert, 2
+    param os
+    param 10
+    call oset_insert, 2
+    param os
+    param 20
+    call oset_insert, 2
+    param "OrderedSet 1st element (0-based):"
+    call MAHI_write, 1
+    param os
+    param 1
+    t28 = call oset_nth, 2
+    param t28
+    call MAHI_write, 1
+    param "OrderedSet contains 20:"
+    call MAHI_write, 1
+    param os
+    param 20
+    t29 = call oset_contains, 2
+    param t29
+    call MAHI_write, 1
+    t30 = call stack_new, 0
+    st = t30
+    param st
+    param 100
+    call stack_push, 2
+    param st
+    param 200
+    call stack_push, 2
+    param "Stack top:"
+    call MAHI_write, 1
+    param st
+    t31 = call stack_top, 1
+    param t31
+    call MAHI_write, 1
+    param "Stack size:"
+    call MAHI_write, 1
+    param st
+    t32 = call stack_size, 1
+    param t32
+    call MAHI_write, 1
+    t33 = call queue_new, 0
+    q = t33
+    param q
+    param 7
+    call queue_push, 2
+    param q
+    param 9
+    call queue_push, 2
+    param "Queue front:"
+    call MAHI_write, 1
+    param q
+    t34 = call queue_front, 1
+    param t34
+    call MAHI_write, 1
+    param "Queue size:"
+    call MAHI_write, 1
+    param q
+    t35 = call queue_size, 1
+    param t35
+    call MAHI_write, 1
+    param "=== Linear Pipeline Demo End ==="
+    call MAHI_write, 1
+    halt

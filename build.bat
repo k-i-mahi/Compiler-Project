@@ -19,7 +19,7 @@ if %errorlevel% neq 0 (
 )
 
 echo [3/3] Compiling C code with GCC...
-gcc parser.tab.c lex.yy.c symbol_table.c ast.c ds_runtime.c eval.c -o compiler.exe -lm
+gcc parser.tab.c lex.yy.c symbol_table.c ast.c ds_runtime.c eval.c tac_gen.c c_gen.c -o compiler.exe -lm
 if %errorlevel% neq 0 (
     echo GCC Compile failed!
     exit /b %errorlevel%

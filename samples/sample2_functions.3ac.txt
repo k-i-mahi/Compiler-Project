@@ -1,0 +1,43 @@
+# Auto-generated Three Address Code
+# Source: .\samples\sample2_functions.linear
+
+function add:
+    # param 0: a
+    # param 1: b
+    t1 = a + b
+    return t1
+
+function multiply:
+    # param 0: x
+    # param 1: y
+    t2 = x * y
+    return t2
+
+function greet:
+    # param 0: name
+    param "Hello"
+    call MAHI_write, 1
+    param name
+    call MAHI_write, 1
+    return 0
+
+main:
+    param 5
+    param 10
+    t3 = call add, 2
+    sum = t3
+    param "sum:"
+    call MAHI_write, 1
+    param sum
+    call MAHI_write, 1
+    param 3.5
+    param 2
+    t4 = call multiply, 2
+    product = t4
+    param "product:"
+    call MAHI_write, 1
+    param product
+    call MAHI_write, 1
+    param "Mahi"
+    call greet, 1
+    halt

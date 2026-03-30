@@ -15,12 +15,15 @@ extern FILE *yyin;
 #include "symbol_table.h"
 #include "ast.h"
 #include "eval.h"
+#include "tac_gen.h"
+#include "c_gen.h"
 
 // External declarations
 extern int yylex();
 extern int yylineno;
 extern char* yytext;
 void yyerror(const char *s);
+static void insert_param_symbols(ASTNode *params);
 
 ASTNode* root = NULL; // The root of the abstract syntax tree
 %}
@@ -87,29 +90,85 @@ ASTNode* root = NULL; // The root of the abstract syntax tree
 
 /* === Type association for non-terminals === */
 %type <type_val> type_specifier
-%type <ast> program statements statement block_statement declaration_statement expression_statement if_statement while_statement for_statement expression argument_list opt_argument_list
+%type <ast> program function_declarations function_declaration parameter_list opt_parameter_list parameter_decl statements statement block_statement declaration_statement expression_statement if_statement while_statement for_statement expression argument_list opt_argument_list
 
 /* === Grammar Rules === */
 %%
 
 program:
-    T_START T_MAIN 
     {
         init_symbol_table();
         if (linear_verbose)
             printf("Program Start: Global scope initialized.\n");
     }
+    function_declarations T_START T_MAIN
     block_statement
     T_END
     {
         root = create_node(NODE_PROGRAM);
-        root->left = $4;
+        root->middle = $2; // function declarations
+        root->left = $5;   // main block
         if (linear_verbose) {
             printf("Parse successful: Program structure is valid.\n");
             print_ast(root, 0);
             print_all_scopes();
         }
     }
+    ;
+
+function_declarations:
+    /* empty */ { $$ = NULL; }
+    | function_declarations function_declaration
+    {
+        if ($1) {
+            add_sibling($1, $2);
+            $$ = $1;
+        } else {
+            $$ = $2;
+        }
+    }
+    ;
+
+function_declaration:
+    T_FUNCTION type_specifier T_IDENTIFIER T_LPAREN opt_parameter_list T_RPAREN
+    {
+        enter_scope();
+        insert_param_symbols($5);
+    }
+    block_statement
+    {
+        $$ = create_node(NODE_FUNC_DECL);
+        $$->name = strdup($3);
+        $$->int_val = $2; // return type
+        $$->left = $5;    // params
+        $$->right = $8;   // body
+        exit_scope();
+        free($3);
+    }
+    ;
+
+parameter_decl:
+    type_specifier T_IDENTIFIER
+    {
+        $$ = create_node(NODE_VAR_DECL);
+        $$->name = strdup($2);
+        $$->int_val = $1;
+        free($2);
+    }
+    ;
+
+parameter_list:
+    parameter_decl { $$ = $1; }
+    | parameter_list T_COMMA parameter_decl
+    {
+        add_sibling($1, $3);
+        $$ = $1;
+    }
+    ;
+
+opt_parameter_list:
+    /* empty */ { $$ = NULL; }
+    | parameter_list { $$ = $1; }
     ;
 
 statements:
@@ -168,6 +227,7 @@ declaration_statement:
         insert_symbol($2, $1, yylineno);
         $$ = create_node(NODE_VAR_DECL);
         $$->name = strdup($2);
+        $$->int_val = $1;
         free($2); 
     }
     | type_specifier T_IDENTIFIER T_ASSIGN expression T_SEMICOLON
@@ -175,6 +235,7 @@ declaration_statement:
         insert_symbol($2, $1, yylineno);
         $$ = create_node(NODE_VAR_DECL);
         $$->name = strdup($2);
+        $$->int_val = $1;
         $$->left = $4;
         free($2);
     }
@@ -377,6 +438,22 @@ int main(int argc, char **argv) {
 
     int ok = yyparse() == 0;
     if (ok && root) {
+        char tac_path[1024];
+        int tac_ok = generate_three_address_code(root, path, tac_path, sizeof(tac_path));
+        if (tac_ok == 0) {
+            printf("3AC generated: %s\n", tac_path);
+        } else {
+            fprintf(stderr, "Warning: failed to generate 3AC (code=%d).\n", tac_ok);
+        }
+
+        char c_path[1024];
+        int c_ok = generate_c_code(root, path, c_path, sizeof(c_path));
+        if (c_ok == 0) {
+            printf("C generated: %s\n", c_path);
+        } else {
+            fprintf(stderr, "Warning: failed to generate C code (code=%d).\n", c_ok);
+        }
+
         interpret(root);
         free_ast(root);
         root = NULL;
@@ -394,4 +471,11 @@ int main(int argc, char **argv) {
 
 void yyerror(const char *s) {
     fprintf(stderr, "Parse Error at line %d: %s near '%s'\n", yylineno, s, yytext);
+}
+
+static void insert_param_symbols(ASTNode *params) {
+    for (ASTNode *p = params; p; p = p->next) {
+        if (p->name)
+            insert_symbol(p->name, (DataType)p->int_val, yylineno);
+    }
 }

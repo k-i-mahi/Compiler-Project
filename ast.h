@@ -16,6 +16,7 @@
 // Types of AST Nodes
 typedef enum {
     NODE_PROGRAM,
+    NODE_FUNC_DECL,
     NODE_BLOCK,
     NODE_VAR_DECL,
     NODE_ASSIGN,
